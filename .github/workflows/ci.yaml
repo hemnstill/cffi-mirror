@@ -1,73 +1,80 @@
 on: push
 
 jobs:
-  sdist:
-    runs-on: ubuntu-20.04
-    steps:
-    - name: clone repo
-      uses: actions/checkout@v2
-
-    - name: build sdist
-      run: |
-        rm -rf dist/
-        python -m pip install build
-        python -m build --sdist
-
-    - name: upload sdist artifact
-      uses: actions/upload-artifact@v2
-      with:
-        path: dist
-        if-no-files-found: error
+#  sdist:
+#    runs-on: ubuntu-20.04
+#    steps:
+#    - name: clone repo
+#      uses: actions/checkout@v2
+#
+#    - name: build sdist
+#      run: |
+#        rm -rf dist/
+#        python -m pip install build
+#        python -m build --sdist
+#
+#    - name: upload sdist artifact
+#      uses: actions/upload-artifact@v2
+#      with:
+#        path: dist
+#        if-no-files-found: error
 
   linux:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
         include:
-        - spec: cp27-manylinux_x86_64
-          cibw_version: cibuildwheel<2.0  # py2.7 is not supported on CIBW 2.0+
-          manylinux_img: manylinux1  # build really old Pythons on manylinux1
-        - spec: cp36-manylinux_x86_64
-          manylinux_img: manylinux1  # build really old Pythons on manylinux1
-        - spec: cp37-manylinux_x86_64
-        - spec: cp38-manylinux_x86_64
-        - spec: cp39-manylinux_x86_64
-        - spec: cp310-manylinux_x86_64
+        #- spec: cp27-manylinux_x86_64
+          #cibw_version: cibuildwheel<2.0  # py2.7 is not supported on CIBW 2.0+
+          #manylinux_img: manylinux1  # build really old Pythons on manylinux1
+        #- spec: cp36-manylinux_x86_64
+          #manylinux_img: manylinux1  # build really old Pythons on manylinux1
+        #- spec: cp37-manylinux_x86_64
+        #- spec: cp38-manylinux_x86_64
+        #- spec: cp39-manylinux_x86_64
+        #- spec: cp310-manylinux_x86_64
         - spec: cp311-manylinux_x86_64
-        - spec: cp27-manylinux_i686
-          cibw_version: cibuildwheel<2.0  # py2.7 is not supported on CIBW 2.0+
-          manylinux_img: manylinux1  # build really old Pythons on manylinux1
-        - spec: cp36-manylinux_i686
-          manylinux_img: manylinux1  # build really old Pythons on manylinux1
-        - spec: cp37-manylinux_i686
-        - spec: cp38-manylinux_i686
-        - spec: cp39-manylinux_i686
-        - spec: cp310-manylinux_i686
+        #- spec: cp27-manylinux_i686
+          #cibw_version: cibuildwheel<2.0  # py2.7 is not supported on CIBW 2.0+
+          #manylinux_img: manylinux1  # build really old Pythons on manylinux1
+        #- spec: cp36-manylinux_i686
+          #manylinux_img: manylinux1  # build really old Pythons on manylinux1
+        #- spec: cp37-manylinux_i686
+        #- spec: cp38-manylinux_i686
+        #- spec: cp39-manylinux_i686
+        #- spec: cp310-manylinux_i686
         - spec: cp311-manylinux_i686
-        - spec: cp39-musllinux_x86_64
-        - spec: cp310-musllinux_x86_64
+        #- spec: cp39-musllinux_x86_64
+        #- spec: cp310-musllinux_x86_64
         - spec: cp311-musllinux_x86_64
-        - spec: cp39-musllinux_i686
-        - spec: cp310-musllinux_i686
+        #- spec: cp39-musllinux_i686
+        #- spec: cp310-musllinux_i686
         - spec: cp311-musllinux_i686
-        - spec: cp36-manylinux_ppc64le
-          foreign_arch: true
-          test_args: '{project}/c'
-        - spec: cp37-manylinux_ppc64le
-          foreign_arch: true
-          test_args: '{project}/c'
-        - spec: cp38-manylinux_ppc64le
-          foreign_arch: true
-          test_args: '{project}/c'
-        - spec: cp39-manylinux_ppc64le
-          foreign_arch: true
-          test_args: '{project}/c'
-        - spec: cp310-manylinux_ppc64le
-          foreign_arch: true
-          test_args: '{project}/c'
+        #- spec: cp36-manylinux_ppc64le
+          #foreign_arch: true
+          #test_args: '{project}/c'
+        #- spec: cp37-manylinux_ppc64le
+          #foreign_arch: true
+          #test_args: '{project}/c'
+        #- spec: cp38-manylinux_ppc64le
+          #foreign_arch: true
+          #test_args: '{project}/c'
+        #- spec: cp39-manylinux_ppc64le
+          #foreign_arch: true
+          #test_args: '{project}/c'
+        #- spec: cp310-manylinux_ppc64le
+          #foreign_arch: true
+          #test_args: '{project}/c'
         - spec: cp311-manylinux_ppc64le
           foreign_arch: true
           test_args: '{project}/c'
+        - spec: cp311-manylinux_s390x
+          foreign_arch: true
+          test_args: '{project}/c'
+        - spec: cp311-manylinux_aarch64
+          foreign_arch: true
+          test_args: '{project}/c'
+
     steps:
     - name: clone repo
       uses: actions/checkout@v2
@@ -119,27 +126,27 @@ jobs:
       matrix:
         include:
         # build for x86_64 under the default hosted macOS 10.x x86_64 runner
-        - spec: cp27-macosx_x86_64
-          cibw_version: cibuildwheel<2.0  # py2.7 is not supported on CIBW 2.0+
-        - spec: cp36-macosx_x86_64
-        - spec: cp37-macosx_x86_64
-        - spec: cp38-macosx_x86_64
-        - spec: cp39-macosx_x86_64
-        - spec: cp310-macosx_x86_64
+        #- spec: cp27-macosx_x86_64
+          #cibw_version: cibuildwheel<2.0  # py2.7 is not supported on CIBW 2.0+
+        #- spec: cp36-macosx_x86_64
+        #- spec: cp37-macosx_x86_64
+        #- spec: cp38-macosx_x86_64
+        #- spec: cp39-macosx_x86_64
+        #- spec: cp310-macosx_x86_64
         - spec: cp311-macosx_x86_64
         # build for arm64 under a hacked macOS 12 self-hosted x86_64-on-arm64 runner until arm64 is fully supported
         # FIXME: ? cp38-macosx_arm64 requires special handling and fails some test_zdist tests under cibw 2.1.2, skip it (so Apple's XCode python3 won't have a wheel)
-        - spec: cp39-macosx_arm64
-          deployment_target: '11.0'
-          runs_on: [self-hosted, macOS]
-          run_wrapper: arch -arm64 bash --noprofile --norc -eo pipefail {0}
-          sdkroot: macosx11.3
+        #- spec: cp39-macosx_arm64
+          #deployment_target: '11.0'
+          #runs_on: [self-hosted, macOS]
+          #run_wrapper: arch -arm64 bash --noprofile --norc -eo pipefail {0}
+          #sdkroot: macosx11.3
 
-        - spec: cp310-macosx_arm64
-          deployment_target: '11.0'
-          runs_on: [self-hosted, macOS]
-          run_wrapper: arch -arm64 bash --noprofile --norc -eo pipefail {0}
-          sdkroot: macosx11.3
+        #- spec: cp310-macosx_arm64
+          #deployment_target: '11.0'
+          #runs_on: [self-hosted, macOS]
+          #run_wrapper: arch -arm64 bash --noprofile --norc -eo pipefail {0}
+          #sdkroot: macosx11.3
 
         - spec: cp311-macosx_arm64
           deployment_target: '11.0'
@@ -182,26 +189,27 @@ jobs:
         path: dist
         if-no-files-found: error
 
+
   windows:
     runs-on: windows-2019
     strategy:
       matrix:
         include:
-        - spec: cp27-win_amd64
-          cibw_version: cibuildwheel==1.10  # last release with proper py2.7 Windows support
-        - spec: cp36-win_amd64
-        - spec: cp37-win_amd64
-        - spec: cp38-win_amd64
-        - spec: cp39-win_amd64
-        - spec: cp310-win_amd64
+        #- spec: cp27-win_amd64
+          #cibw_version: cibuildwheel==1.10  # last release with proper py2.7 Windows support
+        #- spec: cp36-win_amd64
+        #- spec: cp37-win_amd64
+        #- spec: cp38-win_amd64
+        #- spec: cp39-win_amd64
+        #- spec: cp310-win_amd64
         - spec: cp311-win_amd64
-        - spec: cp27-win32
-          cibw_version: cibuildwheel==1.10  # last release with proper py2.7 Windows support
-        - spec: cp36-win32
-        - spec: cp37-win32
-        - spec: cp38-win32
-        - spec: cp39-win32
-        - spec: cp310-win32
+        #- spec: cp27-win32
+          #cibw_version: cibuildwheel==1.10  # last release with proper py2.7 Windows support
+        #- spec: cp36-win32
+        #- spec: cp37-win32
+        #- spec: cp38-win32
+        #- spec: cp39-win32
+        #- spec: cp310-win32
         - spec: cp311-win32
     steps:
     - name: clone repo
